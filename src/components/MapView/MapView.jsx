@@ -1,10 +1,12 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { MapContainer, TileLayer, Marker, Popup } from "react-leaflet";
+import { useDispatch } from "react-redux";
 
 import { getOlives, addOlive } from "../../services/api";
 import OlivesLayer from "./OlivesLayer";
 import MapEventHandler from "./MapEventHandler";
+import { logout } from "../../redux/auth/authThunk";
 
 import styles from "./MapView.module.css";
 
@@ -20,6 +22,12 @@ const MapView = () => {
   const [olives, setOlives] = useState([]);
   const [userLocation, setUserLocation] = useState(null);
   const navigate = useNavigate();
+  const dispatch = useDispatch();
+
+    const handleLogout = async () => {
+      await dispatch(logout()).unwrap();
+      navigate("/login");
+    };
 
   // 1) Определяем геолокацию пользователя
   useEffect(() => {
@@ -88,6 +96,9 @@ const MapView = () => {
 
   return (
     <div className={styles.mapContainer}>
+      <button className={styles.logoutBtn} onClick={handleLogout}>
+        Logout
+      </button>
       <MapContainer
         center={userLocation}
         zoom={13}
