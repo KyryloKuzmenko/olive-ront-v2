@@ -1,9 +1,8 @@
 {
-  
   "rewrites": [
     {
       "source": "/api/v1/:path*",
-      "destination": "https://olive-api-v2.onrender.com/api/:path*"
+      "destination": "https://olive-api-v2.onrender.com/api/v1/:path*"
     },
     { "source": "/(.*)", "destination": "/" }
   ]
