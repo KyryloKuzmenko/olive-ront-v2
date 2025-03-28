@@ -1,12 +1,14 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { MapContainer, TileLayer, Marker, Popup } from "react-leaflet";
+import { MapContainer, TileLayer, Marker, Popup, GeoJSON } from "react-leaflet";
 import { useDispatch } from "react-redux";
 
 import { getOlives, addOlive } from "../../services/api";
 import OlivesLayer from "./OlivesLayer";
 import MapEventHandler from "./MapEventHandler";
 import { logout } from "../../redux/auth/authThunk";
+import { allowedRegions } from "../../data/regions";
+import { isPointInAllowedRegion } from "../../utils/geoHelper";
 
 import styles from "./MapView.module.css";
 
@@ -18,23 +20,18 @@ const userIcon = new L.Icon({
   popupAnchor: [0, -40],
 });
 
-const oliveIcon = new L.Icon({
-  iconUrl: "/img/olive.png", // путь к иконке, корректный для продакшена
-  iconSize: [40, 40],
-  iconAnchor: [20, 40],
-  popupAnchor: [0, -40],
-});
-
 const MapView = () => {
   const [olives, setOlives] = useState([]);
   const [userLocation, setUserLocation] = useState(null);
+  const [warning, setWarning] = useState("");
+
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
-    const handleLogout = async () => {
-      await dispatch(logout()).unwrap();
-      navigate("/login");
-    };
+  const handleLogout = async () => {
+    await dispatch(logout()).unwrap();
+    navigate("/login");
+  };
 
   // 1) Определяем геолокацию пользователя
   useEffect(() => {
@@ -81,6 +78,16 @@ const MapView = () => {
   // handleMapDblClick
   const handleMapDblClick = async (e) => {
     const { lat, lng } = e.latlng;
+
+    const isAllowed = isPointInAllowedRegion([lng, lat]);
+
+    if (!isAllowed) {
+      // 🔔 Показываем кастомное сообщение — дальше настроим
+      setWarning("You can only place markers inside the allowed area");
+      setTimeout(() => setWarning(""), 3000);
+      return;
+    }
+
     try {
       const { data } = await addOlive({
         location: {
@@ -98,7 +105,7 @@ const MapView = () => {
     }
   };
 
-  // Если геолокация ещё не получена, показываем "Загрузка..."
+
   if (!userLocation) return <div>Loading map...</div>;
 
   return (
@@ -106,12 +113,22 @@ const MapView = () => {
       <button className={styles.logoutBtn} onClick={handleLogout}>
         Logout
       </button>
+      {warning && <div className={styles.warning}>{warning}</div>}
+
       <MapContainer
         center={userLocation}
         zoom={13}
         doubleClickZoom={false}
         className={styles.map}
       >
+        <GeoJSON
+          data={allowedRegions}
+          style={() => ({
+            color: "blue",
+            weight: 2,
+            fillOpacity: 0.1,
+          })}
+        />
         <TileLayer url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png" />
         <Marker position={userLocation} icon={userIcon}>
           <Popup>You are here</Popup>
