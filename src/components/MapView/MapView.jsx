@@ -12,7 +12,14 @@ import styles from "./MapView.module.css";
 
 // 1️⃣ Создаем пользовательскую иконку для маркера "You are here"
 const userIcon = new L.Icon({
-  iconUrl: "/src/assets/img/olive.png",
+  iconUrl: "/img/bunny.png",
+  iconSize: [40, 40],
+  iconAnchor: [20, 40],
+  popupAnchor: [0, -40],
+});
+
+const oliveIcon = new L.Icon({
+  iconUrl: "/img/olive.png", // путь к иконке, корректный для продакшена
   iconSize: [40, 40],
   iconAnchor: [20, 40],
   popupAnchor: [0, -40],
