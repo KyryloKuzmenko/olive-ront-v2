@@ -32,6 +32,7 @@ export const useMapClickHandler = (navigate, mapRef, setOlives) => {
             coordinates: [lng, lat],
           },
         });
+
         setOlives((prev) => [...prev, data.data]);
       } catch (error) {
         if (error.response?.status === 401) {

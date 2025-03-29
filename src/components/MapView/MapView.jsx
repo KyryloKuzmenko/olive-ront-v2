@@ -29,7 +29,6 @@ const MapView = () => {
   const { olives, setOlives } = useOlives(navigate);
 
   const handleMapDblClick = useMapClickHandler(navigate, mapRef, setOlives);
-
   if (!userLocation) return <div>Loading map...</div>;
 
   return (

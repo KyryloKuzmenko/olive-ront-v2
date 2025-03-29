@@ -37,10 +37,20 @@ const OlivesLayer = ({ olives }) => {
 
         const [lng, lat] = o.location.coordinates;
 
+        const time = new Date(o.createdAt).toLocaleString("en-US", {
+          hour: "2-digit",
+          minute: "2-digit",
+          hour12: false, //
+        });
+
         return (
           <div key={i}>
             <Marker position={[lat, lng]} icon={oliveIcon}>
-              <Popup>Olive Marker</Popup>
+              <Popup>
+                Olive added at
+                <br />
+                &nbsp;&nbsp;&nbsp;&nbsp;🕒{time}
+              </Popup>
             </Marker>
             <Circle
               center={[lat, lng]}
