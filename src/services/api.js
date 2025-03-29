@@ -8,6 +8,9 @@ const API_OLIVES_URL = "/api/v1/olives";
 // const API_AUTH_URL = "http://localhost:5500/api/v1/auth";
 // const API_OLIVES_URL = "http://localhost:5500/api/v1/olives";
 
+// const API_AUTH_URL = "https://olive-api-v2.onrender.com/api/v1/auth";
+// const API_OLIVES_URL = "https://olive-api-v2.onrender.com/api/v1/olives";
+
 export const signUp = async (userData) => {
   return axios.post(`${API_AUTH_URL}/sign-up`, userData, {
     withCredentials: true,
