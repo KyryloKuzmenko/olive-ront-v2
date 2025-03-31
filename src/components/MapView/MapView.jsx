@@ -28,7 +28,12 @@ const MapView = () => {
   const userLocation = useUserLocation();
   const { olives, setOlives } = useOlives(navigate);
 
-  const handleMapDblClick = useMapClickHandler(navigate, mapRef, setOlives, olives);
+  const handleMapDblClick = useMapClickHandler(
+    navigate,
+    mapRef,
+    setOlives,
+    olives
+  );
   if (!userLocation) return <div>Loading map...</div>;
 
   return (
@@ -36,7 +41,7 @@ const MapView = () => {
       <button className={styles.logoutBtn} onClick={handleLogout}>
         Logout
       </button>
-      <LocateButton mapRef={mapRef} userLocation={userLocation}/>
+      <LocateButton mapRef={mapRef} userLocation={userLocation} />
       <MapContainer
         center={userLocation}
         zoom={15}

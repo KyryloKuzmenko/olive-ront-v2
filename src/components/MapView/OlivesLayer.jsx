@@ -55,6 +55,16 @@ const OlivesLayer = ({ olives }) => {
                 fillOpacity: 0.2,
               }}
             />
+            <Circle
+              center={[lat, lng]}
+              radius={200}
+              pathOptions={{
+                color: "red",
+                weight: 0,
+                fillColor: "red",
+                fillOpacity: 0.3,
+              }}
+            />
           </div>
         );
       })}
