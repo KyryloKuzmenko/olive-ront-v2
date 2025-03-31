@@ -1,14 +1,8 @@
 import { Marker, Popup, Circle } from "react-leaflet";
 import { useEffect, useState } from "react";
-import L from "leaflet";
+import { oliveIcon } from "../../utils/mapIcons";
 
 const OlivesLayer = ({ olives }) => {
-  const oliveIcon = new L.Icon({
-    iconUrl: "/img/olive.png",
-    iconSize: [40, 40],
-    iconAnchor: [20, 40],
-    popupAnchor: [0, -40],
-  });
 
   const [radius, setRadius] = useState(50);
   const [growing, setGrowing] = useState(true);

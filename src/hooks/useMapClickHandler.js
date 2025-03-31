@@ -1,9 +1,12 @@
 import { useCallback } from "react";
 
 import { addOlive } from "../services/api";
-import { isPointInAllowedRegion } from "../utils/geoHelper";
+import {
+  isPointInAllowedRegion,
+  isPointInAllowedRadius,
+} from "../utils/geoHelper";
 
-export const useMapClickHandler = (navigate, mapRef, setOlives) => {
+export const useMapClickHandler = (navigate, mapRef, setOlives, olives) => {
   return useCallback(
     async (e) => {
       const { lat, lng } = e.latlng;
@@ -16,6 +19,21 @@ export const useMapClickHandler = (navigate, mapRef, setOlives) => {
           const popup = L.popup()
             .setLatLng([lat, lng])
             .setContent("🚫 Outside allowed area")
+            .openOn(map);
+
+          setTimeout(() => {
+            map.closePopup(popup);
+          }, 3000);
+        }
+        return;
+      }
+
+      // 2️⃣ Проверка: не ближе 200м к другим маркерам
+      if (!isPointInAllowedRadius([lng, lat], olives)) {
+        if (map) {
+          const popup = L.popup()
+            .setLatLng([lat, lng])
+            .setContent("🚫 Too close to another marker")
             .openOn(map);
 
           setTimeout(() => {
@@ -42,6 +60,6 @@ export const useMapClickHandler = (navigate, mapRef, setOlives) => {
         }
       }
     },
-    [navigate, mapRef, setOlives]
+    [navigate, mapRef, setOlives, olives]
   );
 };

@@ -8,3 +8,17 @@ export const isPointInAllowedRegion = ([lng, lat]) => {
     turf.booleanPointInPolygon(point, region)
   );
 };
+
+export const isPointInAllowedRadius = ([lng, lat], existingMarkers) => {
+  const newPoint = turf.point([lng, lat]);
+
+  return !existingMarkers.some((marker) => {
+    const [mLng, mLat] = marker.location.coordinates;
+    const markerPoint = turf.point([mLng, mLat]);
+
+    const distance = turf.distance(newPoint, markerPoint, { units: "meters" });
+
+    return distance < 200;
+  });
+};
+
