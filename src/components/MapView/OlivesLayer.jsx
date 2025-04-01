@@ -3,7 +3,6 @@ import { useEffect, useState } from "react";
 import { oliveIcon } from "../../utils/mapIcons";
 
 const OlivesLayer = ({ olives }) => {
-
   const [radius, setRadius] = useState(50);
   const [growing, setGrowing] = useState(true);
 
@@ -39,7 +38,15 @@ const OlivesLayer = ({ olives }) => {
 
         return (
           <div key={i}>
-            <Marker position={[lat, lng]} icon={oliveIcon}>
+            <Marker
+              position={[lat, lng]}
+              icon={oliveIcon}
+              eventHandlers={{
+                click: (e) => {
+                  e.target.openPopup();
+                },
+              }}
+            >
               <Popup>
                 Olive added at
                 <br />
@@ -50,9 +57,10 @@ const OlivesLayer = ({ olives }) => {
               center={[lat, lng]}
               radius={radius}
               pathOptions={{
-                color: "#64dd17",
-                fillColor: "#64dd17",
-                fillOpacity: 0.2,
+                color: "red",
+                weight: 1,
+                fillColor: "red",
+                fillOpacity: 0.5,
               }}
             />
             <Circle
