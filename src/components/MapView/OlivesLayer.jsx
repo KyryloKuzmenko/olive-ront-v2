@@ -43,16 +43,13 @@ const OlivesLayer = ({ olives }) => {
               icon={oliveIcon}
               eventHandlers={{
                 click: (e) => {
-                  e.target.openPopup();
+                  const popup = L.popup()
+                    .setLatLng([lat, lng])
+                    .setContent(`Olive added at<br /> &emsp;🕒 ${time}`)
+                    .openOn(e.target._map);
                 },
               }}
-            >
-              <Popup>
-                Olive added at
-                <br />
-                &nbsp;&nbsp;&nbsp;&nbsp;🕒{time}
-              </Popup>
-            </Marker>
+            ></Marker>
             <Circle
               center={[lat, lng]}
               radius={radius}
