@@ -3,8 +3,8 @@ import { useNavigate } from "react-router-dom";
 import { MapContainer, TileLayer, Marker, Popup, GeoJSON } from "react-leaflet";
 import { useDispatch } from "react-redux";
 
-import OlivesLayer from "./OlivesLayer";
-import MapEventHandler from "./MapEventHandler";
+import OlivesLayer from "../OliveLayer/OlivesLayer";
+import MapEventHandler from "../../utils/eventHelper";
 import { logout } from "../../redux/auth/authThunk";
 import { allowedRegions } from "../../data/regions";
 

@@ -4,7 +4,10 @@ import { addOlive } from "../services/api";
 import {
   isPointInAllowedRegion,
   isPointInAllowedRadius,
+  isMarkerLimitReached,
+  isTooSoon,
 } from "../utils/geoHelper";
+import { showMapPopup } from "../utils/mapPopup";
 
 export const useMapClickHandler = (navigate, mapRef, setOlives, olives) => {
   return useCallback(
@@ -42,23 +45,34 @@ export const useMapClickHandler = (navigate, mapRef, setOlives, olives) => {
         }
         return;
       }
+        try {
+          const { data } = await addOlive({
+            location: {
+              type: "Point",
+              coordinates: [lng, lat],
+            },
+          });
 
-      try {
-        const { data } = await addOlive({
-          location: {
-            type: "Point",
-            coordinates: [lng, lat],
-          },
-        });
-
-        setOlives((prev) => [...prev, data.data]);
-      } catch (error) {
-        if (error.response?.status === 401) {
-          navigate("/login");
-        } else {
-          console.error("Error adding olive:", error);
+          setOlives((prev) => [...prev, data.data]);
+        } catch (error) {
+          if (error.response?.status === 401) {
+            navigate("/login");
+          } else if (isMarkerLimitReached(error)) {
+            showMapPopup(
+              mapRef.current,
+              [lat, lng],
+              "⏳ You can only place 3 markers per hour"
+            );
+          } else if (isTooSoon(error)) {
+            showMapPopup(
+              mapRef.current,
+              [lat, lng],
+              "⏳ Please wait 10s"
+            );
+          } else {
+            console.error("Error adding olive:", error);
+          }
         }
-      }
     },
     [navigate, mapRef, setOlives, olives]
   );

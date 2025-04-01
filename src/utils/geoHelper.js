@@ -22,3 +22,15 @@ export const isPointInAllowedRadius = ([lng, lat], existingMarkers) => {
   });
 };
 
+
+export const isMarkerLimitReached = (error) => {
+  const code = error.response?.data?.code
+  return code === "MARKER_LIMIT_REACHED";
+};
+
+export const isTooSoon = (error) => {
+  const code = error.response?.data?.code;
+  return code === "TOO_SOON";
+}
+
+
