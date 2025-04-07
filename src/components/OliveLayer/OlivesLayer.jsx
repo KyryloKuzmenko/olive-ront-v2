@@ -9,7 +9,12 @@ const OlivesLayer = ({ olives }) => {
         const [lng, lat] = o.location.coordinates;
 
         return (
-          <OliveMarker key={i} lat={lat} lng={lng} createdAt={o.createdAt} />
+          <OliveMarker
+            key={o._id || i}
+            lat={lat}
+            lng={lng}
+            createdAt={o.createdAt}
+          />
         );
       })}
     </>

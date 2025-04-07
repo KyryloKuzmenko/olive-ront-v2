@@ -24,12 +24,12 @@ export const isPointInAllowedRadius = ([lng, lat], existingMarkers) => {
 
 
 export const isMarkerLimitReached = (error) => {
-  const code = error.response?.data?.code
+  const code = error?.code
   return code === "MARKER_LIMIT_REACHED";
 };
 
 export const isTooSoon = (error) => {
-  const code = error.response?.data?.code;
+  const code = error?.code;
   return code === "TOO_SOON";
 }
 

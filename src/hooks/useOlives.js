@@ -1,30 +1,21 @@
 import { useEffect, useState } from "react";
 
-import { getOlives } from "../services/api";
+import { useDispatch, useSelector } from "react-redux";
+import { fetchOlives } from "../redux/olives/oliveThunk";
 
 export const useOlives = (navigate) => {
-  const [olives, setOlives] = useState([]);
-
-  const fetchOlives = async () => {
-    try {
-      const { data } = await getOlives();
-      setOlives(data.data);
-    } catch (error) {
-      if (error.response?.status === 401) {
-        navigate("/login");
-      } else {
-        console.error("Error fetching olives:", error);
-      }
-    }
-  };
+  const dispatch = useDispatch();
+  const { olives, error } = useSelector((state) => state.olives);
 
   useEffect(() => {
-    fetchOlives();
+    dispatch(fetchOlives());
 
-    const interval = setInterval(fetchOlives, 12000);
+    const interval = setInterval(() => {
+      dispatch(fetchOlives());
+    }, 12000);
 
     return () => clearInterval(interval);
-  }, []);
+  }, [dispatch]);
 
-  return { olives, setOlives };
+  return { olives };
 };
