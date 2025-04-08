@@ -1,6 +1,6 @@
 import { useCallback } from "react";
+import { useDispatch } from "react-redux";
 
-import { addOlive } from "../services/api";
 import {
   isPointInAllowedRegion,
   isPointInAllowedRadius,
@@ -8,8 +8,7 @@ import {
   isTooSoon,
 } from "../utils/geoHelper";
 import { showMapPopup } from "../utils/mapPopup";
-import { useDispatch } from "react-redux";
-import { addOliveOnMap, fetchOlives } from "../redux/olives/oliveThunk";
+import { addOliveOnMap } from "../redux/olives/oliveThunk";
 
 export const useMapClickHandler = (navigate, mapRef, olives) => {
   // newcode
@@ -51,12 +50,7 @@ export const useMapClickHandler = (navigate, mapRef, olives) => {
         return;
       }
       try {
-        // newcode
         await dispatch(addOliveOnMap([lng, lat])).unwrap();
-        // oldcode
-        // setOlives((prev) => [...prev, data.data]);
-
-        // newcode
       } catch (error) {
         if (error.response?.status === 401) {
           navigate("/login");
